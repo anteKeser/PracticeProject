@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Art Space App</string>
+    <string name="ant_artist">KhiemBeo</string>
+    <string name="facade_artist">ChiemSeherin</string>
+    <string name="xmas_artist">missartem</string>
+    <string name="ant_title">Little Ant On A Plant</string>
+    <string name="facade_title">Beautiful Facade With Flowers</string>
+    <string name="xmas_title">Xmas Tree With Cats</string>
+    <string name="button_next">Next</string>
+    <string name="button_previous">Previous</string>
+</resources>
