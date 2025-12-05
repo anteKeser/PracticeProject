@@ -1,0 +1,10 @@
+<resources>
+    <string name="app_name">Amphibians App</string>
+    <string name="test_description">This toad spends most of its life underground due to the arid desert conditions in which it lives. Spadefoot toads earn the name because of their hind legs which are wedged to aid in digging. They are typically grey, green, or brown with dark spots.</string>
+    <string name="test_type">Toad</string>
+    <string name="test_name">Great Basin Spadefoot</string>
+    <string name="test_img_src">https://developer.android.com/codelabs/basic-android-kotlin-compose-amphibians-app/img/great-basin-spadefoot.png</string>
+    <string name="title">Amphibians App</string>
+    <string name="loading">loading</string>
+    <string name="loading_failed">loading failed</string>
+</resources>
