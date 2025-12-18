@@ -7,7 +7,6 @@ import com.example.apiproject.repository.MealsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 sealed class MealsUiState {
@@ -20,15 +19,17 @@ sealed class MealsUiState {
 
 class MealsViewModel(private val repository: MealsRepository) : ViewModel() {
   private val _uiState = MutableStateFlow<MealsUiState>(MealsUiState.Loading)
-  val uistate: StateFlow<MealsUiState> = _uiState.asStateFlow()
+  val uiState: StateFlow<MealsUiState> = _uiState.asStateFlow()
 
-  fun loadMeals() {
+
+  init {
     viewModelScope.launch {
       try {
         val meals = repository.getMeals()
         _uiState.value = MealsUiState.Success(meals)
       } catch (e: Exception) {
-        _uiState.value = MealsUiState.Error("Something went wrong")
+        e.printStackTrace()
+        _uiState.value = MealsUiState.Error(e.message ?: "Unknown error")
       }
     }
   }

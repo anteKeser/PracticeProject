@@ -2,6 +2,7 @@ package com.example.apiproject.di
 
 import com.example.apiproject.network.MealApi
 import com.example.apiproject.repository.MealsRepository
+import com.example.apiproject.viewModel.MealDetailViewModel
 import com.example.apiproject.viewModel.MealsViewModel
 import io.ktor.client.HttpClient
 import org.koin.android.annotation.KoinViewModel
@@ -21,5 +22,8 @@ class MealsModule {
 
     @KoinViewModel
     fun mealsViewModel(mealsRepository: MealsRepository) = MealsViewModel(mealsRepository)
+
+    @KoinViewModel
+    fun mealDetailViewModel(mealsRepository: MealsRepository) = MealDetailViewModel(mealsRepository)
 
 }

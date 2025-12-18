@@ -50,6 +50,9 @@ kotlin {
       implementation(libs.bundles.ktor)
 
       implementation(libs.jetbrains.compose.navigation)
+
+      implementation(libs.coil.compose)
+      implementation(libs.coil.network)
     }
     commonTest.dependencies { implementation(libs.kotlin.test) }
     jvmMain.dependencies {
@@ -64,6 +67,20 @@ kotlin {
   sourceSets.named("commonMain").configure {
     kotlin.srcDir("build/generated/ksp/metadata/commonMain/kotlin")
   }
+
+  sourceSets.named("androidMain").configure {
+    kotlin.srcDir("build/generated/ksp/android/androidDebug/kotlin")
+  }
+
+  sourceSets.named("jvmMain").configure { kotlin.srcDir("build/generated/ksp/jvm/jvmMain/kotlin") }
+
+  sourceSets.named("iosArm64Main").configure {
+    kotlin.srcDir("build/generated/ksp/iosArm64/iosArm64Main/kotlin")
+  }
+
+  sourceSets.named("iosSimulatorArm64Main").configure {
+    kotlin.srcDir("build/generated/ksp/iosSimulatorArm64/iosSimulatorArm64Main/kotlin")
+  }
 }
 
 ksp {
@@ -71,8 +88,27 @@ ksp {
   arg("KOIN_CONFIG_CHECK", "true")
 }
 
-dependencies { add("kspCommonMainMetadata", libs.koin.ksp.compiler) }
+dependencies {
+  add("kspCommonMainMetadata", libs.koin.ksp.compiler)
+  add("kspAndroid", libs.koin.ksp.compiler)
+  add("kspIosArm64", libs.koin.ksp.compiler)
+  add("kspIosSimulatorArm64", libs.koin.ksp.compiler)
+  add("kspJvm", libs.koin.ksp.compiler)
+}
 
+// Ensure KSP runs before compilation for all targets
+tasks.configureEach {
+  if (name == "compileKotlinMetadata" || name == "compileCommonMainKotlinMetadata") {
+    dependsOn("kspCommonMainKotlinMetadata")
+  }
+  if (name.startsWith("compile") && name.contains("Kotlin") && !name.contains("Test")) {
+    dependsOn("kspCommonMainKotlinMetadata")
+  }
+  // Make platform-specific KSP tasks depend on common metadata KSP
+  if (name.startsWith("ksp") && name != "kspCommonMainKotlinMetadata" && !name.contains("Test")) {
+    dependsOn("kspCommonMainKotlinMetadata")
+  }
+}
 
 android {
   namespace = "com.example.apiproject"

@@ -18,13 +18,10 @@ class AppModule {
   @Single
   fun httpClient(engine: HttpClientEngine): HttpClient =
       HttpClient(engine) {
-        HttpClient(engine) {
-          install(Logging) { level = LogLevel.ALL }
+        install(Logging) { level = LogLevel.ALL }
 
-          install(ContentNegotiation) { json(json = Json { ignoreUnknownKeys = true }) }
-        }
+        install(ContentNegotiation) { json(json = Json { ignoreUnknownKeys = true }) }
       }
 
-    @Factory
-    fun httpClientEngine(): HttpClientEngine = HttpClientEngineFactory().getHttpEngine()
+  @Factory fun httpClientEngine(): HttpClientEngine = HttpClientEngineFactory().getHttpEngine()
 }
