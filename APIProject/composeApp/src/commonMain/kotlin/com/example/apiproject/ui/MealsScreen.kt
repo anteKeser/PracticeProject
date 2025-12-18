@@ -18,6 +18,7 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -45,9 +46,14 @@ fun MealsScreen(
     modifier: Modifier = Modifier,
     viewModel: MealsViewModel = koinViewModel(),
 ) {
+    LaunchedEffect(Unit){
+        viewModel.loadMeals()
+    }
+
+
   val mealsUiState by viewModel.uiState.collectAsStateWithLifecycle()
   when (mealsUiState) {
-    is MealsUiState.Error -> ErrorScreen({})
+    is MealsUiState.Error -> ErrorScreen(retryAction = { viewModel.loadMeals() })
     is MealsUiState.Success ->
         MealsGridScreen(onMealClick, (mealsUiState as MealsUiState.Success).meals, modifier)
     is MealsUiState.Loading -> LoadingScreen()

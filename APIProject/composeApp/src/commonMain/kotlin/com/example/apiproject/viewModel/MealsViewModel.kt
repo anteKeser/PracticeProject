@@ -22,7 +22,7 @@ class MealsViewModel(private val repository: MealsRepository) : ViewModel() {
   val uiState: StateFlow<MealsUiState> = _uiState.asStateFlow()
 
 
-  init {
+    fun loadMeals() {
     viewModelScope.launch {
       try {
         val meals = repository.getMeals()
