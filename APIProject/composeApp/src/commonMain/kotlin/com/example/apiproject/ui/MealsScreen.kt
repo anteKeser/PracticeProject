@@ -36,26 +36,26 @@ import coil3.compose.AsyncImage
 import com.example.apiproject.model.Meal
 import com.example.apiproject.viewModel.MealsUiState
 import com.example.apiproject.viewModel.MealsViewModel
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toPersistentList
 import org.jetbrains.compose.resources.painterResource
 import org.jetbrains.compose.resources.stringResource
 import org.koin.compose.viewmodel.koinViewModel
 
 @Composable
-fun MealsScreen(
-    onMealClick: (String) -> Unit,
-    modifier: Modifier = Modifier,
-    viewModel: MealsViewModel = koinViewModel(),
-) {
-    LaunchedEffect(Unit){
-        viewModel.loadMeals()
-    }
-
+fun MealsScreen(onMealClick: (String) -> Unit, modifier: Modifier = Modifier) {
+  val viewModel = koinViewModel<MealsViewModel>()
+  LaunchedEffect(Unit) { viewModel.loadMeals() }
 
   val mealsUiState by viewModel.uiState.collectAsStateWithLifecycle()
   when (mealsUiState) {
     is MealsUiState.Error -> ErrorScreen(retryAction = { viewModel.loadMeals() })
     is MealsUiState.Success ->
-        MealsGridScreen(onMealClick, (mealsUiState as MealsUiState.Success).meals, modifier)
+        MealsGridScreen(
+            onMealClick,
+            (mealsUiState as MealsUiState.Success).meals.toPersistentList(),
+            modifier,
+        )
     is MealsUiState.Loading -> LoadingScreen()
   }
 }
@@ -63,7 +63,7 @@ fun MealsScreen(
 @Composable
 fun MealsGridScreen(
     onMealClick: (String) -> Unit,
-    meals: List<Meal>,
+    meals: ImmutableList<Meal>,
     modifier: Modifier = Modifier,
 ) {
   LazyVerticalGrid(

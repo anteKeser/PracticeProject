@@ -39,6 +39,7 @@ kotlin {
       implementation(compose.components.uiToolingPreview)
       implementation(libs.androidx.lifecycle.viewmodelCompose)
       implementation(libs.androidx.lifecycle.runtimeCompose)
+      implementation("org.jetbrains.kotlinx:kotlinx-collections-immutable:0.3.6")
 
       implementation(libs.koin.compose)
       implementation(libs.koin.core)

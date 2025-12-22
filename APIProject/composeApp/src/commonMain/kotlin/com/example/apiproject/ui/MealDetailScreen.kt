@@ -30,10 +30,10 @@ import org.koin.compose.viewmodel.koinViewModel
 @Composable
 fun MealDetailScreen(
     mealId: String,
-    viewModel: MealDetailViewModel = koinViewModel(),
     modifier: Modifier,
 ) {
 
+    val viewModel = koinViewModel<MealDetailViewModel>()
     LaunchedEffect(mealId) {
         viewModel.loadMealById(mealId)
     }

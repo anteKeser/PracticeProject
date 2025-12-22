@@ -5,25 +5,15 @@ import com.example.apiproject.repository.MealsRepository
 import com.example.apiproject.viewModel.MealDetailViewModel
 import com.example.apiproject.viewModel.MealsViewModel
 import io.ktor.client.HttpClient
-import org.koin.android.annotation.KoinViewModel
-import org.koin.core.annotation.Factory
-import org.koin.core.annotation.Module
-import org.koin.core.annotation.Single
+import org.koin.core.module.dsl.viewModel
+import org.koin.dsl.module
 
+val MealsModule = module {
+  single { MealApi(get<HttpClient>()) }
 
-@Module
-class MealsModule {
+  factory { MealsRepository(get<MealApi>()) }
 
-    @Single
-    fun mealsApi(httpClient: HttpClient) = MealApi(httpClient)
-
-    @Factory
-    fun mealsRepository(mealApi: MealApi) = MealsRepository(mealApi)
-
-    @KoinViewModel
-    fun mealsViewModel(mealsRepository: MealsRepository) = MealsViewModel(mealsRepository)
-
-    @KoinViewModel
-    fun mealDetailViewModel(mealsRepository: MealsRepository) = MealDetailViewModel(mealsRepository)
-
+  // ViewModels
+  viewModel { MealsViewModel(get<MealsRepository>()) }
+  viewModel { MealDetailViewModel(get<MealsRepository>()) }
 }
