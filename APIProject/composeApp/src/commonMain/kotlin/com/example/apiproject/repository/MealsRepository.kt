@@ -8,7 +8,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
 class MealsRepository(val api: MealApi) {
-  suspend fun getMeals(): Flow<Response<List<Meal>>> = flow {
+   fun getMeals(): Flow<Response<List<Meal>>> = flow {
     emit(Response.Loading)
     try {
       when (val response = api.fetchMeals()) {
@@ -30,7 +30,7 @@ class MealsRepository(val api: MealApi) {
     return api.fetchMealsByRegion(region) ?: emptyList()
   }
 
-  suspend fun getMealById(id: String): Flow<Response<Meal>> = flow {
+   fun getMealById(id: String): Flow<Response<Meal>> = flow {
     emit(Response.Loading)
     try {
       when (val response = api.fetchMealById(id)) {

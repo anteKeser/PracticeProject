@@ -8,7 +8,10 @@ import com.example.apiproject.repository.MealsRepository
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.launch
+
+import kotlinx.coroutines.flow.collect
 
 sealed class MealsUiState {
   object Loading : MealsUiState()
@@ -27,8 +30,13 @@ class MealsViewModel(private val repository: MealsRepository) : ViewModel() {
     viewModelScope.launch {
       try {
         val meals = repository.getMeals()
-        _uiState.value = when(meals) {
-            is Response.Success -> meals.
+        meals.collect {
+            when (it) {
+                is Response.Success -> _uiState.value = MealsUiState.Success(it.data)
+                is Response.Failure -> _uiState.value = MealsUiState.Error(it.e?.message ?: "Unknown error")
+                is Response.Unauthorized -> _uiState.value = MealsUiState.Error("Unauthorized")
+                else -> _uiState.value = MealsUiState.Error("Unknown error")
+            }
         }
       } catch (e: Exception) {
         e.printStackTrace()

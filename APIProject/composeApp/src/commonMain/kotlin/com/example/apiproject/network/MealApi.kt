@@ -18,9 +18,8 @@ class MealApi(private val client: HttpClient) {
   }
 
   suspend fun fetchMealByName(name: String): Meal {
-     return safeApiCall {
-        client.get(ApiRoutes.SEARCH) { parameter("s", name) }
-    }
+        return client.get(ApiRoutes.SEARCH) { parameter("s", name) }.body()
+
   }
 
   suspend fun fetchMealById(id: String): Response<MealDTO> {
